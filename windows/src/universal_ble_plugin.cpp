@@ -63,29 +63,59 @@ namespace universal_ble
 
   void UniversalBlePlugin::EnableBluetooth(std::function<void(ErrorOr<bool> reply)> result)
   {
-    if (!bluetoothRadio)
-    {
-      result(FlutterError("Bluetooth is not available"));
-      return;
-    }
-    if (bluetoothRadio.State() == RadioState::On)
-    {
-      result(true);
-      return;
-    }
-    auto async_c = bluetoothRadio.SetStateAsync(RadioState::On);
-    async_c.Completed([&, result](IAsyncOperation<RadioAccessStatus> const &sender, AsyncStatus const args)
-                      {
-                        auto radioAccessStatus = sender.GetResults();
-                        if (radioAccessStatus == RadioAccessStatus::Allowed)
+      if (!bluetoothRadio)
+      {
+        result(FlutterError("Bluetooth is not available"));
+        return;
+      }
+
+      if (bluetoothRadio.State() == RadioState::On)
+      {
+        result(true);
+        return;
+      }
+
+      auto async_c = bluetoothRadio.SetStateAsync(RadioState::On);
+      async_c.Completed([&, result](IAsyncOperation<RadioAccessStatus> const &sender, AsyncStatus const args)
                         {
-                          result(true);
-                        }
-                        else
+                          auto radioAccessStatus = sender.GetResults();
+                          if (radioAccessStatus == RadioAccessStatus::Allowed)
+                          {
+                            result(true);
+                          }
+                          else
+                          {
+                            result(FlutterError("Failed to enable bluetooth"));
+                          } });
+    }
+  void UniversalBlePlugin::DisableBluetooth(std::function<void(ErrorOr<bool> reply)> result)
+  {
+        if (!bluetoothRadio)
+        {
+        result(FlutterError("Bluetooth is not available"));
+        return;
+        }
+
+        if (bluetoothRadio.State() == RadioState::Off)
+        {
+        result(true);
+        return;
+        }
+
+        auto async_c = bluetoothRadio.SetStateAsync(RadioState::Off);
+        async_c.Completed([&, result](IAsyncOperation<RadioAccessStatus> const &sender, AsyncStatus const args)
                         {
-                          result(FlutterError("Failed to enable bluetooth"));
-                        } });
-  }
+                            auto radioAccessStatus = sender.GetResults();
+                            if (radioAccessStatus == RadioAccessStatus::Allowed)
+                            {
+                            result(true);
+                            }
+                            else
+                            {
+                            result(FlutterError("Failed to disable bluetooth"));
+                            } });
+    }
+
 
   std::optional<FlutterError> UniversalBlePlugin::StartScan(const UniversalScanFilter *filter)
   {
@@ -350,27 +380,29 @@ namespace universal_ble
       auto bluetoothAgent = *it->second;
       GattCharacteristicObject &gatt_characteristic_holder = bluetoothAgent._fetch_characteristic(service, characteristic);
       GattCharacteristic gattCharacteristic = gatt_characteristic_holder.obj;
-      auto properties = gattCharacteristic.CharacteristicProperties();
-      auto writeOption = GattWriteOption::WriteWithResponse;
-      if (ble_output_property == static_cast<int>(BleOutputProperty::withoutResponse))
-      {
-        writeOption = GattWriteOption::WriteWithoutResponse;
-        if ((properties & GattCharacteristicProperties::WriteWithoutResponse) == GattCharacteristicProperties::None)
-        {
-          result(FlutterError("Characteristic does not support WriteWithoutResponse"));
-          return;
-        }
-      }
-      else
-      {
-        if ((properties & GattCharacteristicProperties::Write) == GattCharacteristicProperties::None)
-        {
-          result(FlutterError("Characteristic does not support Write"));
-          return;
-        }
-      }
+//      auto properties = gattCharacteristic.CharacteristicProperties(); todo 我的修改
 
-      WriteAsync(gatt_characteristic_holder.obj, writeOption, value, result);
+
+//      auto writeOption = GattWriteOption::WriteWithResponse;
+//      if (ble_output_property == static_cast<int>(BleOutputProperty::withoutResponse))
+//      {
+//        writeOption = GattWriteOption::WriteWithoutResponse;
+//        if ((properties & GattCharacteristicProperties::WriteWithoutResponse) == GattCharacteristicProperties::None)
+//        {
+//          result(FlutterError("Characteristic does not support WriteWithoutResponse"));
+//          return;
+//        }
+//      }
+//      else
+//      {
+//        if ((properties & GattCharacteristicProperties::Write) == GattCharacteristicProperties::None)
+//        {
+//          result(FlutterError("Characteristic does not support Write"));
+//          return;
+//        }
+//      }
+
+      WriteAsync(gatt_characteristic_holder.obj, GattWriteOption::WriteWithResponse, value, result);
     }
     catch (const FlutterError &err)
     {

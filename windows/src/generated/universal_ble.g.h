@@ -298,6 +298,7 @@ class UniversalBlePlatformChannel {
   virtual ~UniversalBlePlatformChannel() {}
   virtual void GetBluetoothAvailabilityState(std::function<void(ErrorOr<int64_t> reply)> result) = 0;
   virtual void EnableBluetooth(std::function<void(ErrorOr<bool> reply)> result) = 0;
+  virtual void DisableBluetooth(std::function<void(ErrorOr<bool> reply)> result) = 0;
   virtual std::optional<FlutterError> StartScan(const UniversalScanFilter* filter) = 0;
   virtual std::optional<FlutterError> StopScan() = 0;
   virtual std::optional<FlutterError> Connect(const std::string& device_id) = 0;
