@@ -52,6 +52,12 @@ class UniversalBleLinux extends UniversalBlePlatform {
   }
 
   @override
+  Future<bool> disableBluetooth() {
+    throw "not supported";
+  } // disableBluetooth
+
+
+  @override
   Future<void> startScan({
     ScanFilter? scanFilter,
     PlatformConfig? platformConfig,

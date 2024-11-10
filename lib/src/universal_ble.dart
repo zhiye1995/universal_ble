@@ -320,6 +320,12 @@ class UniversalBle {
       () => _platform.enableBluetooth(),
     );
   }
+  // disableBluetooth
+  static Future<bool> disableBluetooth() async {
+    return await _bleCommandQueue.queueCommand(
+      () => _platform.disableBluetooth(),
+    );
+  }
 
   /// [receivesAdvertisements] returns true on web if the browser supports receiving advertisements from a certain `deviceId`.
   /// The rest of the platforms will always return true.

@@ -116,4 +116,10 @@ class MockUniversalBle extends UniversalBlePlatform {
   Future<BleConnectionState> getConnectionState(String deviceId) {
     throw UnimplementedError();
   }
+
+  @override
+  Future<bool> disableBluetooth() {
+    // TODO: implement disableBluetooth
+    throw UnimplementedError();
+  }
 }

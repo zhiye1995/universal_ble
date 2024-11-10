@@ -344,6 +344,12 @@ class UniversalBleWeb extends UniversalBlePlatform {
     throw UnimplementedError();
   }
 
+  @override
+  Future<bool> disableBluetooth() {
+    throw "not supported";
+  } // disableBluetooth
+
+
   RequestOptionsBuilder _getRequestOptionBuilder(
     ScanFilter? scanFilter,
     WebOptions? webOptions,

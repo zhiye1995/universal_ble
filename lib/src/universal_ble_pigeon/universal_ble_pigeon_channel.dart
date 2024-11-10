@@ -27,6 +27,15 @@ class UniversalBlePigeonChannel extends UniversalBlePlatform {
     return _channel.enableBluetooth();
   }
 
+  // disableBluetooth
+  @override
+  Future<bool> disableBluetooth() {
+    if (!BleCapabilities.supportsBluetoothEnableApi) {
+      throw UnsupportedError("Not supported");
+    }
+    return _channel.disableBluetooth();
+  }
+
   @override
   Future<void> startScan({
     ScanFilter? scanFilter,

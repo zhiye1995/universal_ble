@@ -208,6 +208,24 @@ class _MyAppState extends State<MyApp> {
                       });
                     },
                   ),
+
+                // 打开蓝牙
+                PlatformButton(
+                  text: 'Open Bluetooth',
+                  onPressed: () async {
+                    bool isEnabled = await UniversalBle.enableBluetooth();
+                    showSnackbar("BluetoothEnabled: $isEnabled");
+                  },
+                ),
+                // 关闭蓝牙
+                PlatformButton(
+                  text: 'Close Bluetooth',
+                  onPressed: () async {
+                    bool isEnabled = await UniversalBle.disableBluetooth();
+                    showSnackbar("BluetoothEnabled: $isEnabled");
+                  },
+                ),
+
               ],
             ),
           ),

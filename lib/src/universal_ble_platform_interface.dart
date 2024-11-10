@@ -12,6 +12,9 @@ abstract class UniversalBlePlatform {
 
   Future<bool> enableBluetooth();
 
+  // disableBluetooth
+  Future<bool> disableBluetooth();
+
   Future<void> startScan({
     ScanFilter? scanFilter,
     PlatformConfig? platformConfig,
